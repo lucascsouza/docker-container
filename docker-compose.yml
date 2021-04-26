@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  database:
+    build:
+      context: ./images/database/
+    container_name: database
+    restart: unless-stopped
+    ports:
+      - ${DOCKER_DB_PORT}:3306
+    environment:
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: local_dev
+    volumes:
+      - ./db/data:/var/lib/mysql
+    networks:
+      - net1
+
+  app:
+    build:
+      context: images/app/
+    container_name: app
+    restart: unless-stopped
+    ports:
+      - ${DOCKER_HTTP_PORT}:80
+      - ${DOCKER_HTTPS_PORT}:443
+      - ${DOCKER_WEBPACK_PORT}:8000
+    volumes:
+      - ./apps:/var/www/html
+      - ./config/apache:/vhosts
+      - ./data:/srv/dev_data
+      - ./config/ssh:/root/.ssh
+      - ~/.cache/composer:/root/.cache/composer
+    networks:
+      - net1
+    depends_on:
+      - database
+    command: entrypoint
+
+networks:
+  net1:
+    driver: bridge

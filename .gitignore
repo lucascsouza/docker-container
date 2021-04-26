@@ -1,0 +1,6 @@
+.env
+/.idea
+/apps/*
+/config/apache/*
+/data/*
+/db/data/*
