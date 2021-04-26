@@ -1,4 +1,4 @@
-#Docker Container
+# Docker Container
 
 ## Como instalar
 1. Copie o arquivo `.env.example` e renomeie para `.env` (altere o valor da variáveis se desejar)
